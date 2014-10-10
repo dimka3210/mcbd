@@ -13,7 +13,7 @@ public class Main {
 
         SystemTray tray = SystemTray.getSystemTray();
         Image trayImage = Tools.getDefaultIcon();
-        TrayMenu trayMenu = new TrayMenu();
+        TrayMenu trayMenu = new TrayMenu(Thread.currentThread());
         TrayIcon trayIcon = new TrayIcon(trayImage, "MultiClipboard", trayMenu);
 
         trayIcon.setImageAutoSize(true);

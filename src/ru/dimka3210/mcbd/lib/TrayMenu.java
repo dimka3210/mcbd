@@ -3,6 +3,7 @@ package ru.dimka3210.mcbd.lib;
 import ru.dimka3210.mcbd.mainframe.MainFrame;
 import ru.dimka3210.mcbd.models.ItemModel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +13,11 @@ import java.awt.event.ActionListener;
  * Support <dimka3210@gmail.com>
  */
 public class TrayMenu extends PopupMenu {
-    public TrayMenu() throws HeadlessException {
+    public TrayMenu(Thread thread) throws HeadlessException {
         MenuItem showMainFrameItem = new MenuItem("Показать окно настроек");
         MenuItem exitItem = new MenuItem("Закрыть программу");
         showMainFrameItem.addActionListener(item1Listener());
-        exitItem.addActionListener(item2Listener());
+        exitItem.addActionListener(item2Listener(thread));
 
         try {
             for (final ItemModel item : ItemModel.getAll()) {
@@ -49,11 +50,13 @@ public class TrayMenu extends PopupMenu {
         };
     }
 
-    public ActionListener item2Listener() {
+    public ActionListener item2Listener(final Thread mainThread) {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                synchronized (mainThread) {
+                    System.exit(JFrame.EXIT_ON_CLOSE);
+                }
             }
         };
     }

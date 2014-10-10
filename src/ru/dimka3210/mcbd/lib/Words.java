@@ -34,9 +34,7 @@ public class Words {
     public Set<String> load(){
         try {
             properties.loadFromXML(new FileInputStream(wordsFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
         return properties.stringPropertyNames();
     }
 
