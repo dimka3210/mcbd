@@ -16,10 +16,19 @@ public class Tools {
         return Toolkit.getDefaultToolkit().getImage(Tools.getWorkPath() + "/img/078.jpeg");
     }
 
-    public static File getWordsFile() throws Exception {
-        File configFile = new File(getWorkPath() + "/words");
-        if (!configFile.exists()) {
-            configFile.createNewFile();
+    /**
+     * @return File|null
+     */
+    public static File getWordsFile() {
+        File configFile = null;
+        try {
+            configFile = new File(getWorkPath() + "/words");
+            if (!configFile.exists()) {
+                configFile.createNewFile();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return configFile;
     }

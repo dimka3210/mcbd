@@ -1,9 +1,7 @@
 package ru.dimka3210.mcbd.models;
 
-import ru.dimka3210.mcbd.lib.Tools;
-import sun.misc.Regexp;
+import ru.dimka3210.mcbd.lib.Words;
 
-import java.io.FileInputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,16 +32,9 @@ public class ItemModel {
     }
 
     public static ArrayList<ItemModel> getAll() throws Exception {
-        Properties properties = new Properties();
         ArrayList<ItemModel> items = new ArrayList<ItemModel>();
 
-        try {
-            properties.loadFromXML(new FileInputStream(Tools.getWordsFile()));
-        } catch (InvalidPropertiesFormatException e) {
-            return items;
-        }
-
-        for (String key : properties.stringPropertyNames()) {
+        for (String key : Words.getInstance().load()) {
             boolean isPrivate = false;
             Pattern p = Pattern.compile("#^_(.*)#");
             Matcher m = p.matcher(key);
@@ -52,7 +43,7 @@ public class ItemModel {
                 key = m.group();
             }
 
-            items.add(new ItemModel(key, properties.getProperty(key), isPrivate));
+            items.add(new ItemModel(key, Words.getInstance().get(key), isPrivate));
         }
         return items;
     }

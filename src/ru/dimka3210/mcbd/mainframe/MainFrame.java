@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by dimka3210 on 16.09.14.
@@ -21,14 +20,11 @@ public class MainFrame extends JFrame {
     protected JPanel mainPanel;
     protected JPanel listPane;
     protected JTextField textField;
-    protected JCheckBox hideCheckBox;
     protected JButton okButton;
     protected JButton resetButton;
-    protected JPasswordField passwordField;
     protected JTextField keywordField;
     protected JPanel actionsPane;
     protected JPanel wordsPanel;
-    protected ArrayList<ItemModel> items = new ArrayList<ItemModel>();
 
     public static MainFrame getInstance() {
         if (instance == null) {
@@ -38,10 +34,6 @@ public class MainFrame extends JFrame {
     }
 
     private MainFrame() {
-        for (int i = 0; i < 50; i++) {
-            items.add(new ItemModel("hello" + i, "Привет " + i, new Random().nextBoolean()));
-        }
-
         setTitle("Настройки");
         setMinimumSize(new Dimension(500, 300));
         setLocationRelativeTo(null);
@@ -51,22 +43,20 @@ public class MainFrame extends JFrame {
         componentsListener = new MainFrameComponentsListener(this);
 
         addWindowListener(windowListener);
-        hideCheckBox.addActionListener(componentsListener.checkboxListener());
         okButton.addActionListener(componentsListener.okButtonListener());
+        resetButton.addActionListener(componentsListener.resetButtonListener());
     }
 
     private void createUIComponents() throws Exception {
         mouseListener = new MainFrameMouseListener(this);
         wordsPanel = new JPanel();
         wordsPanel.setLayout(new BoxLayout(wordsPanel, BoxLayout.Y_AXIS));
-//        wordsPanel.setDoubleBuffered(true);
         drawItems(ItemModel.getAll());
     }
 
     public void drawItems(ArrayList<ItemModel> items) {
         wordsPanel.removeAll();
-
-        LineBorder border = new LineBorder(new Color(48, 44, 173));
+        LineBorder border = new LineBorder(new Color(144, 153, 173));
 
         for (ItemModel item : items) {
             ItemPanelModel keywordPanel = new ItemPanelModel(item.getKey(), item.getValue());
@@ -81,7 +71,8 @@ public class MainFrame extends JFrame {
             keywordPanel.setBorder(border);
             keywordPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             wordsPanel.add(keywordPanel);
-            wordsPanel.updateUI();
+            wordsPanel.revalidate();
+            wordsPanel.repaint();
         }
     }
 }

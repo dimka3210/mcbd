@@ -1,11 +1,11 @@
 package ru.dimka3210.mcbd.lib;
 
 import ru.dimka3210.mcbd.mainframe.MainFrame;
+import ru.dimka3210.mcbd.models.ItemModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 /**
  * Created by dimka3210 on 16.09.14.
@@ -13,14 +13,29 @@ import java.io.File;
  */
 public class TrayMenu extends PopupMenu {
     public TrayMenu() throws HeadlessException {
-        MenuItem item1 = new MenuItem("Показать окно настроек");
-        MenuItem item2 = new MenuItem("Закрыть программу");
+        MenuItem showMainFrameItem = new MenuItem("Показать окно настроек");
+        MenuItem exitItem = new MenuItem("Закрыть программу");
+        showMainFrameItem.addActionListener(item1Listener());
+        exitItem.addActionListener(item2Listener());
 
-        item1.addActionListener(item1Listener());
-        item2.addActionListener(item2Listener());
+        try {
+            for (final ItemModel item : ItemModel.getAll()) {
+                MenuItem _item = new MenuItem(item.getKey());
+                _item.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Clipboard.addString(item.getValue());
+                    }
+                });
+                this.add(_item);
+            }
 
-        this.add(item1);
-        this.add(item2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.addSeparator();
+        this.add(showMainFrameItem);
+        this.add(exitItem);
     }
 
     public ActionListener item1Listener() {
