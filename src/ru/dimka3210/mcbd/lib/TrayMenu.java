@@ -2,8 +2,8 @@ package ru.dimka3210.mcbd.lib;
 
 import ru.dimka3210.mcbd.mainframe.MainFrame;
 import ru.dimka3210.mcbd.models.ItemModel;
+import ru.dimka3210.mcbd.models.TrayMenuItemModel;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,51 +13,9 @@ import java.awt.event.ActionListener;
  * Support <dimka3210@gmail.com>
  */
 public class TrayMenu extends PopupMenu {
-    public TrayMenu(Thread thread) throws HeadlessException {
-        MenuItem showMainFrameItem = new MenuItem("Показать окно настроек");
-        MenuItem exitItem = new MenuItem("Закрыть программу");
-        showMainFrameItem.addActionListener(item1Listener());
-        exitItem.addActionListener(item2Listener(thread));
-
-        try {
-            for (final ItemModel item : ItemModel.getAll()) {
-                MenuItem _item = new MenuItem(item.getKey());
-                _item.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Clipboard.addString(item.getValue());
-                    }
-                });
-                this.add(_item);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public TrayMenu(Thread mainThread) throws HeadlessException {
         this.addSeparator();
-        this.add(showMainFrameItem);
-        this.add(exitItem);
-    }
-
-    public ActionListener item1Listener() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                synchronized (this) {
-                    MainFrame.getInstance().setVisible(true);
-                }
-            }
-        };
-    }
-
-    public ActionListener item2Listener(final Thread mainThread) {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                synchronized (mainThread) {
-                    System.exit(JFrame.EXIT_ON_CLOSE);
-                }
-            }
-        };
+        this.add(TrayMenuItemModel.getShowFrameItem());
+        this.add(TrayMenuItemModel.getCloseItem(mainThread));
     }
 }

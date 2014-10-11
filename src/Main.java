@@ -1,5 +1,6 @@
 import ru.dimka3210.mcbd.lib.Tools;
 import ru.dimka3210.mcbd.lib.TrayMenu;
+import ru.dimka3210.mcbd.models.TrayMenuItemModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class Main {
         TrayIcon trayIcon = new TrayIcon(trayImage, "MultiClipboard", trayMenu);
 
         trayIcon.setImageAutoSize(true);
-        trayIcon.addActionListener(trayMenu.item1Listener());
+        trayIcon.addActionListener(TrayMenuItemModel.getShowFrameListener());
         tray.add(trayIcon);
     }
 }

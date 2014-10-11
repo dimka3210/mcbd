@@ -13,7 +13,8 @@ public class Tools {
     }
 
     public static Image getDefaultIcon() throws Exception {
-        return Toolkit.getDefaultToolkit().getImage(Tools.getWorkPath() + "/img/078.jpeg");
+        System.out.println(Tools.getWorkPath() + "/img/icon.jpg");
+        return Toolkit.getDefaultToolkit().getImage(Tools.getWorkPath() + "/img/icon.jpg");
     }
 
     /**
