@@ -1,9 +1,12 @@
 package ru.dimka3210.mcbd.mainframe;
 
+import ru.dimka3210.mcbd.lib.Tools;
+import ru.dimka3210.mcbd.models.DropLabelPanel;
 import ru.dimka3210.mcbd.models.ItemModel;
 import ru.dimka3210.mcbd.models.ItemPanelModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class MainFrame extends JFrame {
 
     private MainFrame() {
         setTitle("Настройки");
-        setMinimumSize(new Dimension(500, 300));
+//        setMinimumSize(new Dimension(500, 300));
         setLocationRelativeTo(null);
         setContentPane(mainPanel);
 
@@ -45,34 +48,39 @@ public class MainFrame extends JFrame {
         addWindowListener(windowListener);
         okButton.addActionListener(componentsListener.okButtonListener());
         resetButton.addActionListener(componentsListener.resetButtonListener());
+        pack();
     }
 
     private void createUIComponents() throws Exception {
         mouseListener = new MainFrameMouseListener(this);
         wordsPanel = new JPanel();
-        wordsPanel.setLayout(new BoxLayout(wordsPanel, BoxLayout.Y_AXIS));
+        wordsPanel.setLayout(new BoxLayout(wordsPanel, BoxLayout.PAGE_AXIS));
         drawItems(ItemModel.getAll());
     }
 
     public void drawItems(ArrayList<ItemModel> items) {
         wordsPanel.removeAll();
         LineBorder border = new LineBorder(new Color(144, 153, 173));
+        Image dropIcon = Toolkit.getDefaultToolkit().createImage(Tools.getWorkPath() + "/img/delete.jpg");
+        Icon icon = new ImageIcon(dropIcon);
 
         for (ItemModel item : items) {
-            ItemPanelModel keywordPanel = new ItemPanelModel(item.getKey(), item.getValue());
-            keywordPanel.setLayout(new BorderLayout());
+            final ItemPanelModel keywordPanel = new ItemPanelModel(item.getKey(), item.getValue());
+
             JLabel keywordLabel = new JLabel(item.getKey());
-            JLabel valueLabel = new JLabel(item.getValue());
-            Dimension oldSize = keywordLabel.getSize();
-            keywordPanel.setSize(new Dimension(wordsPanel.getWidth(), oldSize.height));
-            keywordPanel.add(keywordLabel, BorderLayout.WEST);
-            keywordPanel.add(valueLabel, BorderLayout.EAST);
+            JLabel dropLabel = new DropLabelPanel(icon, keywordPanel, wordsPanel);
+
+            keywordLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+            keywordPanel.setLayout(new BorderLayout());
+            keywordPanel.add(keywordLabel, BorderLayout.EAST);
+            keywordPanel.add(dropLabel, BorderLayout.WEST);
             keywordPanel.addMouseListener(mouseListener.getItemsListener());
             keywordPanel.setBorder(border);
             keywordPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             wordsPanel.add(keywordPanel);
-            wordsPanel.revalidate();
-            wordsPanel.repaint();
         }
+        wordsPanel.revalidate();
+        wordsPanel.repaint();
     }
 }

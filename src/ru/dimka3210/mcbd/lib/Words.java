@@ -1,9 +1,8 @@
 package ru.dimka3210.mcbd.lib;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import ru.dimka3210.mcbd.models.LogModel;
+
+import java.io.*;
 import java.util.Properties;
 import java.util.Set;
 
@@ -31,10 +30,12 @@ public class Words {
         return properties.getProperty(keyword);
     }
 
-    public Set<String> load(){
+    public Set<String> load() {
         try {
             properties.loadFromXML(new FileInputStream(wordsFile));
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            LogModel.add(e.getMessage());
+        }
         return properties.stringPropertyNames();
     }
 
@@ -44,7 +45,20 @@ public class Words {
         try {
             properties.storeToXML(new FileOutputStream(wordsFile), keyword);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogModel.add(e.getMessage());
         }
+    }
+
+    public void del(String dropKey) {
+        load();
+        properties.remove(dropKey);
+        try {
+            properties.storeToXML(new FileOutputStream(wordsFile), "");
+        } catch (FileNotFoundException e) {
+            LogModel.add(e.getMessage());
+        } catch (IOException e) {
+            LogModel.add(e.getMessage());
+        }
+
     }
 }

@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Created by dimka3210 on 11.10.14.
@@ -58,11 +59,8 @@ public class TrayMenuItemModel extends MenuItem {
         };
     }
 
-    public static MenuItem[] getWordItems() throws Exception {
-        int wordsCount = ItemModel.getAll().size();
-        int iteration = 0;
-        MenuItem[] items = new MenuItem[wordsCount];
-
+    public static ArrayList<MenuItem> getWordItems() throws Exception {
+        ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 
         for (final ItemModel item : ItemModel.getAll()) {
             MenuItem menuItem = new MenuItem(item.getKey());
@@ -72,8 +70,7 @@ public class TrayMenuItemModel extends MenuItem {
                     Clipboard.addString(item.getValue());
                 }
             });
-            items[iteration] = menuItem;
-            iteration++;
+            items.add(menuItem);
         }
 
         return items;

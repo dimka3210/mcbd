@@ -20,6 +20,11 @@ public class ItemModel {
         this.isPrivate = isPrivate;
     }
 
+    public ItemModel(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
     public String getValue() {
         if (isPrivate) {
             return "*********";
@@ -35,15 +40,7 @@ public class ItemModel {
         ArrayList<ItemModel> items = new ArrayList<ItemModel>();
 
         for (String key : Words.getInstance().load()) {
-            boolean isPrivate = false;
-            Pattern p = Pattern.compile("#^_(.*)#");
-            Matcher m = p.matcher(key);
-            if (m.find()) {
-                isPrivate = true;
-                key = m.group();
-            }
-
-            items.add(new ItemModel(key, Words.getInstance().get(key), isPrivate));
+            items.add(new ItemModel(key, Words.getInstance().get(key)));
         }
         return items;
     }

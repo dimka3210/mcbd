@@ -1,5 +1,6 @@
 import ru.dimka3210.mcbd.lib.Tools;
 import ru.dimka3210.mcbd.lib.TrayMenu;
+import ru.dimka3210.mcbd.mainframe.MainFrameComponentsListener;
 import ru.dimka3210.mcbd.models.TrayMenuItemModel;
 
 import javax.swing.*;
@@ -14,9 +15,9 @@ public class Main {
 
         SystemTray tray = SystemTray.getSystemTray();
         Image trayImage = Tools.getDefaultIcon();
-        TrayMenu trayMenu = new TrayMenu(Thread.currentThread());
-        TrayIcon trayIcon = new TrayIcon(trayImage, "MultiClipboard", trayMenu);
+        Tools.setTrayMenu(new TrayMenu(Thread.currentThread()));
 
+        TrayIcon trayIcon = new TrayIcon(trayImage, "MultiClipboard", Tools.getTrayMenu());
         trayIcon.setImageAutoSize(true);
         trayIcon.addActionListener(TrayMenuItemModel.getShowFrameListener());
         tray.add(trayIcon);

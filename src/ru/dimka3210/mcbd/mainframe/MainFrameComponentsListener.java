@@ -1,7 +1,10 @@
 package ru.dimka3210.mcbd.mainframe;
 
+import ru.dimka3210.mcbd.lib.Tools;
+import ru.dimka3210.mcbd.lib.TrayMenu;
 import ru.dimka3210.mcbd.lib.Words;
 import ru.dimka3210.mcbd.models.ItemModel;
+import ru.dimka3210.mcbd.models.LogModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +29,9 @@ public class MainFrameComponentsListener {
                 try {
                     Words.getInstance().add(keyword, value);
                     MainFrame.getInstance().drawItems(ItemModel.getAll());
+                    Tools.getTrayMenu().paintItems(Thread.currentThread());
                 } catch (Exception mainFrameException) {
-                    mainFrameException.printStackTrace();
+                    LogModel.add(mainFrameException.getMessage());
                 }
             }
         };
